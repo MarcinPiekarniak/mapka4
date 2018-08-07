@@ -32,8 +32,8 @@ class FilterPanel extends Component {
 
   zoomTo(index) {
     let coordinates = {
-      longitude: this.props.airportVehicles[index].position[0],
-      latitude: this.props.airportVehicles[index].position[1],
+      longitude: this.state.displayedVehicles[index].position[0],
+      latitude: this.state.displayedVehicles[index].position[1],
 
     }
     this.props.zoomViewport(coordinates);
