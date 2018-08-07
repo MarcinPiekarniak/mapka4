@@ -7,6 +7,13 @@ export const airportVehicles = (state = initialState.airportVehicles, action) =>
         ...state,
         airportVehicles: action.airportVehicles,
       }
+      
+    case 'UPDATE_AIRPORT_VEHICLES':
+      return {
+        ...state,
+        airportVehicles: action.airportVehicles,
+      }
+
     case 'FILTER_AIRPORT_VEHICLES':
       return {
         ...state,

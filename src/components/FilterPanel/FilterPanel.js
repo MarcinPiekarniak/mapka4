@@ -18,8 +18,15 @@ class FilterPanel extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.airportVehicles != nextProps.airportVehicles) {
       this.setState({
-        displayedVehicles: nextProps.airportVehicles,
-      })
+        displayedVehicles: nextProps.airportVehicles.filter(vehicle => {
+            const {id, name, type} = vehicle;
+            return (
+              String(id).toLowerCase().includes(this.state.vehiclesSearch) ||
+              name.toLowerCase().includes(this.state.vehiclesSearch) ||
+              type.toLowerCase().includes(this.state.vehiclesSearch)
+            );
+          }),
+      });
     }
   }
 

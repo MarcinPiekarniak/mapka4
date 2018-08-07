@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { AirportMapContainer, ViewManagerContainer, TimeBoxContainer, FilterPanelContainer } from './components';
-import { airportVehiclesLoaded } from "./actions";
+import { airportVehiclesLoaded, airportVehiclesUpdate } from "./actions";
 import { connect } from "react-redux";
 
 export default class Airport extends Component {
@@ -35,7 +35,64 @@ export default class Airport extends Component {
     console.log('LOADING');
     console.log(vehicles);
     this.props.airportVehiclesLoaded(vehicles);
+
+		this.timerID = setInterval(
+		  () => this._updateVehiclesPositions(),
+		  80
+		);
   }
+
+	_updateVehiclesPositions() {
+
+		const newVehicles =  this.props.airportVehicles.map(v => ({
+			position: [
+				v.position[0] + v.speed * Math.cos(v.bearing * Math.PI / 180),
+				v.position[1] + v.speed * Math.sin(v.bearing * Math.PI / 180)
+			],
+			bearing: v.bearing,
+			speed: v.speed,
+			id: v.id,
+			type: v.type,
+			name: v.name,
+		}))
+
+		this.props.airportVehiclesUpdate(newVehicles);
+
+		/*
+
+  	this.setState(prevState => {
+  		const newVehicles =  prevState.vehicles.map(v => ({
+  			position: [
+  				v.position[0] + v.speed * Math.cos(v.bearing * Math.PI / 180),
+  				v.position[1] + v.speed * Math.sin(v.bearing * Math.PI / 180)
+  			],
+  			bearing: v.bearing,
+  			speed: v.speed,
+  			id: v.id
+  		}))
+
+  		let newObject = prevState.infowindow.object;
+  		if (prevState.infowindow && prevState.infowindow.layer && prevState.infowindow.layer.id === "vehicles layer" && prevState.infowindow.object && prevState.infowindow.object.id) {
+  			newObject = newVehicles.filter(v => v.id === prevState.infowindow.object.id).slice(-1)[0];
+  			if(!newObject) {
+  				newObject = prevState.infowindow.object;
+  			}
+  		}
+
+  		return {
+  			vehicles: newVehicles,
+  			infowindow: {
+  				...prevState.infowindow,
+  				object: newObject
+  			}
+  		}
+  	});
+
+		*/
+
+  }
+
+
 
   render() {
     //let layers = this.state.data.filter(layer => layer != null).map(layer => new MapLayer({...layer, lightSettings: LIGHT_SETTINGS}));
@@ -52,10 +109,12 @@ export default class Airport extends Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+		airportVehicles: state.airportVehicles.airportVehicles
+	};
 };
 
-const mapDispatchToProps = { airportVehiclesLoaded };
+const mapDispatchToProps = { airportVehiclesLoaded, airportVehiclesUpdate };
 
 export const AirportContainer = connect(mapStateToProps, mapDispatchToProps)(Airport);
 

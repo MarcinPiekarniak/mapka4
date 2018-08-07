@@ -7,7 +7,7 @@ export const viewports = (state = initialState.viewports, action) => {
     case 'VIEWPORT_RESET':
       return {
         ...state,
-        currentViewport: state.defaultViewport
+        currentViewport: JSON.parse(JSON.stringify(state.defaultViewport))
       }
     case 'VIEWPORT_UPDATE':
       return {

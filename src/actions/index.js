@@ -3,6 +3,12 @@ export const airportVehiclesLoaded = (airportVehicles) => ({
   airportVehicles
 });
 
+export const airportVehiclesUpdate = (airportVehicles) => ({
+  type: 'UPDATE_AIRPORT_VEHICLES',
+  airportVehicles
+});
+
+
 export const airportVehiclesFilter = (vehiclesSearchValue) => ({
   type: 'FILTER_AIRPORT_VEHICLES',
   vehiclesSearchValue
