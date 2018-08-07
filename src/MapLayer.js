@@ -1,4 +1,4 @@
-import {GeoJsonLayer} from 'deck.gl';
+import {GeoJsonLayer, COORDINATE_SYSTEM} from 'deck.gl';
 import airportGeojson from './data/airport_geojson.js';
 
 const LIGHT_SETTINGS = {
@@ -75,6 +75,7 @@ export default class MapLayer extends GeoJsonLayer {
         depthTest: false
 			},
       lightSettings: LIGHT_SETTINGS,
+      coordinateSystem: COORDINATE_SYSTEM.LNGLAT_EXPERIMENTAL
     })
 	}
 }
