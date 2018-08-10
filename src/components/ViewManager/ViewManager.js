@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 export class ViewManager extends Component {
 
   resetViewport() {
-    console.log('woah');
     this.props.resetViewport();
   }
 
@@ -23,12 +22,12 @@ export class ViewManager extends Component {
         <button onClick={this.resetViewport.bind(this)}>default</button>
 	<br />
 	<p>
-	   Zoom:  
+	   Zoom:
            <button onClick={this.zoomInViewPort.bind(this)}>+</button>
 	   /
 	   <button onClick={this.zoomOutViewPort.bind(this)}>-</button>
 	</p>
-      </div>	
+      </div>
     );
   }
 }

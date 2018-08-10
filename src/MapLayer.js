@@ -62,7 +62,7 @@ export default class MapLayer extends GeoJsonLayer {
       stroked: false,
       filled: true,
       extruded: false,
-      pickable: false,
+      //pickable: false,
       fp64: true,
       getElevation: f => 0,
       getFillColor: f => {
@@ -75,7 +75,10 @@ export default class MapLayer extends GeoJsonLayer {
         depthTest: false
 			},
       lightSettings: LIGHT_SETTINGS,
-      coordinateSystem: COORDINATE_SYSTEM.LNGLAT_EXPERIMENTAL
+      coordinateSystem: COORDINATE_SYSTEM.LNGLAT_EXPERIMENTAL,
+      //onClick: info => console.log('Clicked:', info),
+      //onHover: info => console.log('Hovered:', info),
+      pickable: false,
     })
 	}
 }

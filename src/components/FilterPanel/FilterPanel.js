@@ -8,7 +8,6 @@ import { getFilteredAirportVehicles } from '../../selectors';
 class FilterPanel extends Component {
   constructor(props) {
     super(props);
-    console.log('start');
     this.state = {
       vehiclesSearch: '',
       displayedVehicles: this.props.airportVehicles,
@@ -40,7 +39,6 @@ class FilterPanel extends Component {
   }
 
   handleSearchChange = e => {
-    console.log("LOL");
     const displayedVehicles = this.props.airportVehicles.filter(vehicle => {
       const {id, name, type} = vehicle;
       return (
@@ -62,8 +60,6 @@ class FilterPanel extends Component {
 
 
   render() {
-    console.log('woah');
-    console.log(this.state);
     return (
       <div className="filterpanel">
         <input
@@ -91,8 +87,6 @@ class FilterPanel extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('hahaha');
-  console.log(state);
   return {
 
     airportVehicles: getFilteredAirportVehicles(

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import DeckGL, {ScatterplotLayer, IconLayer} from 'deck.gl';
+import DeckGL, {ScatterplotLayer, IconLayer, COORDINATE_SYSTEM} from 'deck.gl';
 import MapLayer from '../../MapLayer.js';
 import { connect } from "react-redux";
 import { updateViewport } from '../../actions';
@@ -11,16 +11,10 @@ class AirportMap extends Component {
     super(props);
     this.layers = [new MapLayer()];
     this.state = {
-      /*tooltip: {
-      	x: 0,
-      	y: 0,
+      tooltip: {
       	object: null,
       	layer: null
       },
-      infowindow: {
-      	object: null,
-      	layer: null
-      },*/
       width: 500,
       height: 500,
 	  };
@@ -43,29 +37,66 @@ class AirportMap extends Component {
     });
   }
 
+  _getObjectInfo(object) {
+    return <div>o jejku</div>;
+    return Object.keys(object).map(k => <div>o jejku</div>);
+  	return Object.keys(object).map(k => <div key={k}>{k}: {object[k]}</div>);
+  }
+
+  _renderTooltip() {
+  	const {object, layer} = this.state.tooltip;
+
+    if (!object || !layer) {
+      return null;
+    }
+
+    const coords = layer.context.viewport.project([object.position[0], object.position[1]]);
+    const x = coords[0];
+    const y = coords[1];
+    const info = this._getObjectInfo(object);
+    console.log(object);
+  	return (
+        <div className="tooltip"
+             style={{left: x, top: y}}>
+          {info}
+        </div>
+    );
+  }
+
+  _updateTooltip(info) {
+  	if (info) {
+  		const {object, layer} = info;
+		  this.setState({tooltip: {object, layer}});
+    } else {
+    	this.setState({tooltip: {object: null, layer: null}});
+    }
+  }
+
   render() {
     const { width, height } = this.state;
     let allLayers = this.layers.slice(0);
 
-    console.log('props airportmap');
-    console.log(this.props);
     //stairs misc "vacuum truck"
 
     this.props.airportVehicles.forEach(v => {
 
+      let data = [
+        {
+          position: [ v.position[0], v.position[1] ],
+          type: v.type,
+          name: v.name,
+          icon: null,
+        }
+      ];
 
-      let data = null;
-      console.log(v.type);
-      if (v.type === "stairs") {
-        data = [{position: [ v.position[0], v.position[1] ], icon: 'stairs'}];
-      }
-      else if (v.type === "misc") {
-        data = [{position: [ v.position[0], v.position[1] ], icon: 'misc'}];
-      }
-      else if (v.type === "vacuum truck") {
-        data = [{position: [ v.position[0], v.position[1] ], icon: 'vacuum'}];
-      }
-      console.log(data);
+      const typeToIcon = {
+        "stairs": "stairs",
+        "misc": "misc",
+        "vacuum truck": "vacuum",
+      };
+
+      data[0].icon = typeToIcon[v.type];
+
       let icon = new IconLayer({
           id: `icon-layer-${v.id}`,
           data: data,
@@ -78,52 +109,23 @@ class AirportMap extends Component {
           sizeScale: Math.pow(2, this.props.viewport.zoom - 15),
           getSize: 20,
           opacity: 1,
-          fp64: false,
+          fp64: true,
           parameters: {
             depthTest: false
           },
+          coordinateSystem: COORDINATE_SYSTEM.LNGLAT_EXPERIMENTAL,
+          onClick: info => this._updateTooltip.bind(this)(info),
+          //onHover: info => this._updateTooltip.bind(this)(info),
+          pickable: true,
       });
 
       allLayers.push(icon);
 
     })
-    console.log('ALLLAYERS');
-    console.log(allLayers);
-/*
-    const robotLayer = new IconLayer({
-            id: 'icon-layer',
-            data: [{position: [ 18.471562507878815, 54.380394488786585 ], icon: 'marker'}],
-            iconAtlas: imageJPG,
-            iconMapping:  {
-              marker: {x: 0, y: 0, width: 259, height: 194, mask: false}
-            },
-            sizeScale: 1,
-            getSize: 400,
-            opacity: 1,
-            fp64: true
-        });
-*/
 
-/*
-    allLayers.push(new ScatterplotLayer({
-      id: "vehicles layer",
-      data: this.props.airportVehicles.map(v => ({
-        radius: 1,
-        color: [70, 70, 255],
-        ...v
-      })),
-      outline: false,
-      fp64: true,
-      pickable: true,
-      transitions: {
-      	getPositions: 80
-      },
-      parameters: {
-          depthTest: false
-      }
-    }));*/
     return (
       <div>
+        {this._renderTooltip()}
         <DeckGL
           {...this.props.viewport}
           width={width}
@@ -134,15 +136,12 @@ class AirportMap extends Component {
             this.props.updateViewport(viewState)
           }}
         />
-
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  console.log ('WOLOLO');
-  console.log(state);
   return {
     airportVehicles: getFilteredAirportVehicles(
         state.airportVehicles.airportVehicles,

@@ -26,14 +26,13 @@ export default class Airport extends Component {
 			"misc", "stairs", "stairs", "misc", "vacuum truck",
 			"misc", "stairs", "stairs", "misc", "vacuum truck"
 		];
+
 		for (let i = 0; i < 10; ++i) {
 			vehicles[i].id = i;
 			vehicles[i].type = types[i];
 			vehicles[i].name = names[i];
 		}
 
-    console.log('LOADING');
-    console.log(vehicles);
     this.props.airportVehiclesLoaded(vehicles);
 
 		this.timerID = setInterval(

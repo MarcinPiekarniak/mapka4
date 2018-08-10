@@ -9,7 +9,5 @@ export const getFilteredAirportVehicles = (airportVehicles, text) => {
       type.toLowerCase().includes(airportVehiclesSearch)
     );
   });
-  console.log('filtering');
-  console.log(f);
   return f;
 };

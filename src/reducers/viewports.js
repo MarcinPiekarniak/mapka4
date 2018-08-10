@@ -1,8 +1,6 @@
 import initialState from './initialState.js';
 
 export const viewports = (state = initialState.viewports, action) => {
-  console.log('wolololo');
-  console.log(state);
   switch (action.type) {
     case 'VIEWPORT_RESET':
       return {
