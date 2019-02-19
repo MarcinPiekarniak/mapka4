@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/mapka4/precache-manifest.d3482bb6b67a20bc7f01c8525c824917.js"
+  "/mapka4/precache-manifest.9aa635965ca9af1472dc14e2544071e9.js"
 );
 
 workbox.clientsClaim();
